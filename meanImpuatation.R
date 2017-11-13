@@ -1,8 +1,17 @@
+
+##########################################
+## author - Amitsingh Pardeshi           #
+##  mean dataimputation                  #
+##########################################
+
+## install packages
 install.packages("VIM")
 install.packages("mice")
 install.packages("missForest")
 install.packages("imputeR")
 install.packages("hydroGOF")
+
+## import libraries
 library(mice)
 library(missForest)
 library(VIM)
