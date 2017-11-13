@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\n##########################################\n## author - Amitsingh Pardeshi           #\n##  mean dataimputation                  #\n##########################################\n\n## install packages\ninstall.packages(\"VIM\")\ninstall.packages(\"mice\")\ninstall.packages(\"missForest\")\ninstall.packages(\"imputeR\")\ninstall.packages(\"hydroGOF\")\n\n## import libraries\nlibrary(mice)\nlibrary(missForest)\nlibrary(VIM)\nlibrary(imputeR)\nlibrary(hydroGOF)\npath <- \"..\"\nshow(path)\n\n#load data\ndata <- iris\n\n# get summary\nsummary(data)\n\ndataWolastCol <- data[,-5]\n##create missing data 2,5,10, 15,20,25\niris.mis_2 <- prodNA(dataWolastCol, noNA = 0.02)\niris.mis_5 <- prodNA(dataWolastCol, noNA = 0.05)\niris.mis_10 <- prodNA(dataWolastCol, noNA = 0.1)\niris.mis_15 <- prodNA(dataWolastCol, noNA = 0.15)\niris.mis_20 <- prodNA(dataWolastCol, noNA = 0.02)\niris.mis_25 <- prodNA(dataWolastCol, noNA = 0.25)\n\n\n# check missing values\n#summary(iris.mis)\n\n#md.pattern(iris.mis)\n\n#mice_plot <- aggr(iris.mis, col=c('navyblue','yellow'),\n#                 numbers=TRUE, sortVars=TRUE,\n#                labels=names(iris.mis), cex.axis=.7,\n#               gap=3, ylab=c(\"Missing data\",\"Pattern\"))\n\n\n\n## call meanDataImuation with iris.mis\niris.meanImpuated_2 <- kNN(iris.mis_2)\niris.meanImpuated_5 <- kNN(iris.mis_5)\niris.meanImpuated_10 <- kNN(iris.mis_10)\niris.meanImpuated_15<- kNN(iris.mis_15)\niris.meanImpuated_20<- kNN(iris.mis_20)\niris.meanImpuated_25 <- kNN(iris.mis_25)\n\niris.meanImpuated_2 <- iris.meanImpuated_2[,1:4]\niris.meanImpuated_5 <- iris.meanImpuated_2[,1:4]\niris.meanImpuated_10 <- iris.meanImpuated_2[,1:4]\niris.meanImpuated_15<- iris.meanImpuated_2[,1:4]\niris.meanImpuated_20<- iris.meanImpuated_2[,1:4]\niris.meanImpuated_25 <- iris.meanImpuated_2[,1:4]\n\nrmseMean_2 <- rmse(iris.meanImpuated_2, dataWolastCol, na.rm = TRUE)\nrmseMean_5 <- rmse(iris.meanImpuated_5, dataWolastCol, na.rm = TRUE)\nrmseMean_10 <- rmse(iris.meanImpuated_10, dataWolastCol, na.rm = TRUE)\nrmseMean_15<- rmse(iris.meanImpuated_15,dataWolastCol ,na.rm = TRUE)\nrmseMean_20 <- rmse(iris.meanImpuated_20, dataWolastCol, na.rm = TRUE)\nrmseMean_25 <- rmse(iris.meanImpuated_25, dataWolastCol, na.rm = TRUE)\n\nprint(rmseMean_2)\nprint(rmseMean_5)\nprint(rmseMean_10)\nprint(rmseMean_15)\nprint(rmseMean_20)\nprint(rmseMean_25)\nrmseVecpt <- c(rmseMean_2, rmseMean_5, rmseMean_10, rmseMean_15, rmseMean_20, rmseMean_25)\n\nbarplot(rmseVecpt)\n\n",
+    "created" : 1510544744349.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2936164524",
+    "id" : "8BB947C6",
+    "lastKnownWriteTime" : 1510545465,
+    "last_content_update" : 1510545465633,
+    "path" : "F:/AmitTTUDocs/course/R/dataImpuatation/knnImputation.R",
+    "project_path" : "knnImputation.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
