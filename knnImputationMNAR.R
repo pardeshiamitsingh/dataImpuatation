@@ -29,12 +29,37 @@ summary(data)
 
 dataWolastCol <- data[,-5]
 ##create missing data 2,5,10, 15,20,25
-iris.mis_2 <- prodNA(dataWolastCol, noNA = 0.02)
-iris.mis_5 <- prodNA(dataWolastCol, noNA = 0.05)
-iris.mis_10 <- prodNA(dataWolastCol, noNA = 0.1)
-iris.mis_15 <- prodNA(dataWolastCol, noNA = 0.15)
-iris.mis_20 <- prodNA(dataWolastCol, noNA = 0.02)
-iris.mis_25 <- prodNA(dataWolastCol, noNA = 0.25)
+
+
+dataWolastCol_1 <- as.data.frame(data[,1])
+dataWolastCol_3 <- as.data.frame(data[,3])
+##create missing data 2,5,10, 15,20,25
+iris.mis_2_0 <- prodNA(dataWolastCol_1, noNA = 0.04)
+iris.mis_2_1 <- prodNA(dataWolastCol_3, noNA = 0.04)
+
+iris.mis_5_0 <- prodNA(dataWolastCol_1, noNA = 0.1)
+iris.mis_5_1 <- prodNA(dataWolastCol_3, noNA = 0.1)
+
+iris.mis_10_0 <- prodNA(dataWolastCol_1, noNA = 0.2)
+iris.mis_10_1 <- prodNA(dataWolastCol_3, noNA = 0.2)
+
+iris.mis_15_0 <- prodNA(dataWolastCol_1, noNA = 0.3)
+iris.mis_15_1 <- prodNA(dataWolastCol_3, noNA = 0.3)
+
+iris.mis_20_0 <- prodNA(dataWolastCol_1, noNA = 0.4)
+iris.mis_20_1 <- prodNA(dataWolastCol_3, noNA = 0.4)
+
+iris.mis_25_0 <- prodNA(dataWolastCol_1, noNA = 0.5)
+iris.mis_25_1 <- prodNA(dataWolastCol_3, noNA = 0.5)
+
+iris.mis_2 <- cbind(iris.mis_2_0,data[,2],iris.mis_2_1, data[,4])
+iris.mis_5 <- cbind(iris.mis_5_0,data[,2],iris.mis_5_1, data[,4])
+iris.mis_10 <- cbind(iris.mis_10_0,data[,2],iris.mis_10_1, data[,4])
+iris.mis_15 <- cbind(iris.mis_15_0,data[,2],iris.mis_15_1, data[,4])
+iris.mis_20 <- cbind(iris.mis_20_0,data[,2],iris.mis_20_1, data[,4])
+iris.mis_25 <- cbind(iris.mis_25_0,data[,2],iris.mis_25_1, data[,4])
+
+
 
 
 # check missing values
@@ -82,6 +107,8 @@ rmseVecpt <- c(rmseMean_2, rmseMean_5, rmseMean_10, rmseMean_15, rmseMean_20, rm
 barplot(rmseVecpt)
 
 
+
+
 ## calculate classification error
 lebal <- iris[,5]
 
@@ -126,4 +153,6 @@ table(iris_train_target, iris.pred_15)
 table(iris_train_target, iris.pred_20)
 table(iris_train_target, iris.pred_25)
 #table(iris_train_target, iris.pred)
+
+
 

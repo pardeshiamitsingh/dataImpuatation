@@ -10,6 +10,8 @@ install.packages("mice")
 install.packages("missForest")
 install.packages("imputeR")
 install.packages("hydroGOF")
+install.packages("gmodels")
+install.packages("class")
 
 ## import libraries
 library(mice)
@@ -17,6 +19,9 @@ library(missForest)
 library(VIM)
 library(imputeR)
 library(hydroGOF)
+library(gmodels)
+library(class)
+
 path <- ".."
 show(path)
 
@@ -71,6 +76,7 @@ iris.meanImpuated_15<- meanDataImpuation(iris.mis_15)
 iris.meanImpuated_20<- meanDataImpuation(iris.mis_20)
 iris.meanImpuated_25 <- meanDataImpuation(iris.mis_25)
 
+## calculate RMSE
 rmseMean_2 <- rmse(iris.meanImpuated_2, iris[,-5], na.rm = TRUE)
 rmseMean_5 <- rmse(iris.meanImpuated_5, iris[,-5], na.rm = TRUE)
 rmseMean_10 <- rmse(iris.meanImpuated_10, iris[,-5], na.rm = TRUE)
@@ -86,6 +92,51 @@ print(rmseMean_20)
 print(rmseMean_25)
 rmseVecpt <- c(rmseMean_2, rmseMean_5, rmseMean_10, rmseMean_15, rmseMean_20, rmseMean_25)
 
+##plot RMSE 
 barplot(rmseVecpt)
 
-  
+## calculate classification error
+lebal <- iris[,5]
+
+
+#set.seed(9850)
+
+#gp<- runif(nrow(iris))
+
+#iris_r <- iris[order(gp)]
+iris_r <- iris_r[,c(1,2,3,4)]
+iris_c_2 <-rbind(iris_r, iris.meanImpuated_2)
+normalize <- function(x){
+  return( (x -min(x))/ (max(x) - min(x)))
+}
+
+iris_n <- as.data.frame(lapply(iris_c_2, normalize))
+
+iris_train <- iris_n[1:150,]
+iris_train_test <- iris_n[151:300,]
+iris_train_target <- iris[, 5]
+
+iris.meanImpuated_5_n <- as.data.frame(lapply(iris.meanImpuated_5, normalize))
+iris.meanImpuated_10_n <- as.data.frame(lapply(iris.meanImpuated_10, normalize))
+iris.meanImpuated_15_n <- as.data.frame(lapply(iris.meanImpuated_15, normalize))
+iris.meanImpuated_20_n <- as.data.frame(lapply(iris.meanImpuated_20, normalize))
+iris.meanImpuated_25_n <- as.data.frame(lapply(iris.meanImpuated_25, normalize))
+iris.meanImpuated_2_n <- as.data.frame(lapply(iris.meanImpuated_2, normalize))
+
+
+iris.pred_2 <- knn(train = iris_train_test, test=iris_train_test, cl = iris_train_target, k =20)
+iris.pred_5 <- knn(train = iris.meanImpuated_5_n, test=iris.meanImpuated_5_n, cl = iris_train_target, k =20)
+iris.pred_10 <- knn(train = iris.meanImpuated_10_n, test=iris.meanImpuated_10_n, cl = iris_train_target, k =20)
+iris.pred_15 <- knn(train = iris.meanImpuated_15_n, test=iris.meanImpuated_15_n, cl = iris_train_target, k =20)
+iris.pred_20 <- knn(train = iris.meanImpuated_20_n, test=iris.meanImpuated_20_n, cl = iris_train_target, k =20)
+iris.pred_25 <- knn(train = iris.meanImpuated_25_n, test=iris.meanImpuated_25_n, cl = iris_train_target, k =20)
+iris.pred <- knn(train = iris_train, test=iris_train, cl = iris_train_target, k =20)
+
+ table(iris_train_target, iris.pred_2)
+ table(iris_train_target, iris.pred_5)
+ table(iris_train_target, iris.pred_10)
+ table(iris_train_target, iris.pred_15)
+ table(iris_train_target, iris.pred_20)
+ table(iris_train_target, iris.pred_25)
+ table(iris_train_target, iris.pred)
+

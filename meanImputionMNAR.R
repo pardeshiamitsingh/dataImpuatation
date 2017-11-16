@@ -1,7 +1,7 @@
 
 ##########################################
 ## author - Amitsingh Pardeshi           #
-##  mean dataimputation                  #
+##  mean dataimputation  MNAR                #
 ##########################################
 
 ## install packages
@@ -10,6 +10,8 @@ install.packages("mice")
 install.packages("missForest")
 install.packages("imputeR")
 install.packages("hydroGOF")
+install.packages("gmodels")
+install.packages("class")
 
 ## import libraries
 library(mice)
@@ -17,7 +19,9 @@ library(missForest)
 library(VIM)
 library(imputeR)
 library(hydroGOF)
+library(gmodels)
 library(class)
+
 path <- ".."
 show(path)
 
@@ -27,14 +31,33 @@ data <- iris
 # get summary
 summary(data)
 
-dataWolastCol <- data[,-5]
+dataWolastCol_1 <- as.data.frame(data[,1])
+dataWolastCol_3 <- as.data.frame(data[,3])
 ##create missing data 2,5,10, 15,20,25
-iris.mis_2 <- prodNA(dataWolastCol, noNA = 0.02)
-iris.mis_5 <- prodNA(dataWolastCol, noNA = 0.05)
-iris.mis_10 <- prodNA(dataWolastCol, noNA = 0.1)
-iris.mis_15 <- prodNA(dataWolastCol, noNA = 0.15)
-iris.mis_20 <- prodNA(dataWolastCol, noNA = 0.02)
-iris.mis_25 <- prodNA(dataWolastCol, noNA = 0.25)
+iris.mis_2_0 <- prodNA(dataWolastCol_1, noNA = 0.04)
+iris.mis_2_1 <- prodNA(dataWolastCol_3, noNA = 0.04)
+
+iris.mis_5_0 <- prodNA(dataWolastCol_1, noNA = 0.1)
+iris.mis_5_1 <- prodNA(dataWolastCol_3, noNA = 0.1)
+
+iris.mis_10_0 <- prodNA(dataWolastCol_1, noNA = 0.2)
+iris.mis_10_1 <- prodNA(dataWolastCol_3, noNA = 0.2)
+
+iris.mis_15_0 <- prodNA(dataWolastCol_1, noNA = 0.3)
+iris.mis_15_1 <- prodNA(dataWolastCol_3, noNA = 0.3)
+
+iris.mis_20_0 <- prodNA(dataWolastCol_1, noNA = 0.4)
+iris.mis_20_1 <- prodNA(dataWolastCol_3, noNA = 0.4)
+
+iris.mis_25_0 <- prodNA(dataWolastCol_1, noNA = 0.5)
+iris.mis_25_1 <- prodNA(dataWolastCol_3, noNA = 0.5)
+
+iris.mis_2 <- cbind(iris.mis_2_0,data[,2],iris.mis_2_1, data[,4])
+iris.mis_5 <- cbind(iris.mis_5_0,data[,2],iris.mis_5_1, data[,4])
+iris.mis_10 <- cbind(iris.mis_10_0,data[,2],iris.mis_10_1, data[,4])
+iris.mis_15 <- cbind(iris.mis_15_0,data[,2],iris.mis_15_1, data[,4])
+iris.mis_20 <- cbind(iris.mis_20_0,data[,2],iris.mis_20_1, data[,4])
+iris.mis_25 <- cbind(iris.mis_25_0,data[,2],iris.mis_25_1, data[,4])
 
 
 # check missing values
@@ -47,29 +70,38 @@ iris.mis_25 <- prodNA(dataWolastCol, noNA = 0.25)
 #                labels=names(iris.mis), cex.axis=.7,
 #               gap=3, ylab=c("Missing data","Pattern"))
 
-
-
+## mean data impuation
+# takes dataframe as input and replace NA values with mean of the column
+meanDataImpuation <- function(df){
+  i <- 1
+  for(col in names(df)){
+    # meanVal <- mean(df[,0], na.rm = TRUE)
+    print(i)
+    print(df[, i])
+    localVector <-  df[,i] 
+    localVector[is.na(localVector)]<- mean(localVector[!is.na(localVector)])
+    df[,i] <- localVector
+    i <- i + 1;
+  }
+  
+  print(df)
+  
+}
 ## call meanDataImuation with iris.mis
-iris.meanImpuated_2 <- kNN(iris.mis_2)
-iris.meanImpuated_5 <- kNN(iris.mis_5)
-iris.meanImpuated_10 <- kNN(iris.mis_10)
-iris.meanImpuated_15<- kNN(iris.mis_15)
-iris.meanImpuated_20<- kNN(iris.mis_20)
-iris.meanImpuated_25 <- kNN(iris.mis_25)
+iris.meanImpuated_2 <- meanDataImpuation(iris.mis_2)
+iris.meanImpuated_5 <- meanDataImpuation(iris.mis_5)
+iris.meanImpuated_10 <- meanDataImpuation(iris.mis_10)
+iris.meanImpuated_15<- meanDataImpuation(iris.mis_15)
+iris.meanImpuated_20<- meanDataImpuation(iris.mis_20)
+iris.meanImpuated_25 <- meanDataImpuation(iris.mis_25)
 
-iris.meanImpuated_2 <- iris.meanImpuated_2[,1:4]
-iris.meanImpuated_5 <- iris.meanImpuated_5[,1:4]
-iris.meanImpuated_10 <- iris.meanImpuated_10[,1:4]
-iris.meanImpuated_15<- iris.meanImpuated_15[,1:4]
-iris.meanImpuated_20<- iris.meanImpuated_20[,1:4]
-iris.meanImpuated_25 <- iris.meanImpuated_25[,1:4]
-
-rmseMean_2 <- rmse(iris.meanImpuated_2, dataWolastCol, na.rm = TRUE)
-rmseMean_5 <- rmse(iris.meanImpuated_5, dataWolastCol, na.rm = TRUE)
-rmseMean_10 <- rmse(iris.meanImpuated_10, dataWolastCol, na.rm = TRUE)
-rmseMean_15<- rmse(iris.meanImpuated_15,dataWolastCol ,na.rm = TRUE)
-rmseMean_20 <- rmse(iris.meanImpuated_20, dataWolastCol, na.rm = TRUE)
-rmseMean_25 <- rmse(iris.meanImpuated_25, dataWolastCol, na.rm = TRUE)
+## calculate RMSE
+rmseMean_2 <- rmse(iris.meanImpuated_2, iris[,-5], na.rm = TRUE)
+rmseMean_5 <- rmse(iris.meanImpuated_5, iris[,-5], na.rm = TRUE)
+rmseMean_10 <- rmse(iris.meanImpuated_10, iris[,-5], na.rm = TRUE)
+rmseMean_15<- rmse(iris.meanImpuated_15,iris[,-5], na.rm = TRUE)
+rmseMean_20 <- rmse(iris.meanImpuated_20, iris[,-5], na.rm = TRUE)
+rmseMean_25 <- rmse(iris.meanImpuated_25, iris[,-5], na.rm = TRUE)
 
 print(rmseMean_2)
 print(rmseMean_5)
@@ -79,8 +111,8 @@ print(rmseMean_20)
 print(rmseMean_25)
 rmseVecpt <- c(rmseMean_2, rmseMean_5, rmseMean_10, rmseMean_15, rmseMean_20, rmseMean_25)
 
+##plot RMSE 
 barplot(rmseVecpt)
-
 
 ## calculate classification error
 lebal <- iris[,5]
