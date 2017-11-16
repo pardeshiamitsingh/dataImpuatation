@@ -114,6 +114,32 @@ rmseVecpt <- c(rmseMean_2, rmseMean_5, rmseMean_10, rmseMean_15, rmseMean_20, rm
 ##plot RMSE 
 barplot(rmseVecpt)
 
+
+##plot RMSE 
+barplot(rmseMean_2, ylab = "RMSE", main="RMSE error distribution for 2%  missing data")
+barplot(rmseMean_5 , ylab = "RMSE", main="RMSE error distribution for 5%  missing data")
+barplot(rmseMean_10, ylab = "RMSE", main="RMSE error distribution for 10%  missing data")
+barplot(rmseMean_15, ylab = "RMSE", main="RMSE error distribution for 15%  missing data")
+barplot(rmseMean_20, ylab = "RMSE", main="RMSE error distribution for 20%  missing data")
+barplot(rmseMean_25, ylab = "RMSE", main="RMSE error distribution for 25%  missing data")
+
+
+
+total_RMSE_2 <-  rmseMean_2[1] + rmseMean_2[2] + rmseMean_2[3] + rmseMean_2[4]
+total_RMSE_5 <- rmseMean_5[1] + rmseMean_5[2] + rmseMean_5[3] + rmseMean_5[4]
+total_RMSE_10 <- rmseMean_10[1] + rmseMean_10[2] + rmseMean_10[3] + rmseMean_10[4]
+total_RMSE_15 <- rmseMean_15[1] + rmseMean_15[2] + rmseMean_15[3] + rmseMean_15[4]
+total_RMSE_20 <- rmseMean_20[1] + rmseMean_20[2] + rmseMean_20[3] + rmseMean_20[4]
+total_RMSE_25 <- rmseMean_25[1] + rmseMean_25[2] + rmseMean_25[3] + rmseMean_25[4]
+
+total_rmse <- c(total_RMSE_2,total_RMSE_5, total_RMSE_10, total_RMSE_15, total_RMSE_20,total_RMSE_25)
+
+per_col <- c(2,5,10,15,20,25)
+
+rmse_df <- data.frame(percentage = per_col,error = total_rmse);
+barplot(rmse_df$error,  ylab = "RMSE", main="RMSE error distribution from 2% to 25%  missing data")
+
+
 ## calculate classification error
 lebal <- iris[,5]
 
