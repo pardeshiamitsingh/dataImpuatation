@@ -104,7 +104,7 @@ total_rmse <- c(total_RMSE_2,total_RMSE_5, total_RMSE_10, total_RMSE_15, total_R
 per_col <- c(2,5,10,15,20,25)
 
 rmse_df <- data.frame(percentage = per_col,error = total_rmse);
-barplot(rmse_df$error,  ylab = "RMSE", main="RMSE error distribution from 2% to 25%  missing data")
+barplot(rmse_df$error,  ylab = "RMSE", main="RMSE")
 
 
 
